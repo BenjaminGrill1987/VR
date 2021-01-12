@@ -297,7 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33b8488d9f57fe44d89697f9af80d776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 0
+  currentState: 1
   firePartical: {fileID: 6146762336947104740}
 --- !u!1 &8331637841896688020
 GameObject:
