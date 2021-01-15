@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Torch : MonoBehaviour
+public class Torch : MonoBehaviour,IFlamable
 {
     [SerializeField] private FireState currentState;
     [SerializeField] private ParticleSystem firePartical;
-
-    public FireState CurrentState { get => currentState; }
 
     private void Start()
     {
@@ -21,7 +19,7 @@ public class Torch : MonoBehaviour
         }
     }
 
-    private void TryToChange(FireState newState)
+    public void TryToChange(FireState newState)
     {
         bool permissionGranted = false;
 
@@ -53,15 +51,32 @@ public class Torch : MonoBehaviour
         }
     }
 
+    private void OnParticleCollision(GameObject other)
+    {
+        Debug.LogError("Partical collision");
+        if(other.gameObject.tag == "fire")
+        {
+            TryToChange(FireState.Light);
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.LogError("normal collision");
+
+
         foreach (ContactPoint contact in collision.contacts)
         {
-            if (contact.thisCollider.gameObject.tag == "TorchHead" && contact.otherCollider.gameObject.tag == "TorchHead" && collision.gameObject.GetComponent<Torch>().CurrentState == FireState.Light)
+            if (contact.thisCollider.gameObject.tag == "TorchHead" && contact.otherCollider.gameObject.tag == "TorchHead" && collision.gameObject.GetComponent<IFlamable>().GetTheFireState() == FireState.Light)
             {
                 TryToChange(FireState.Light);
             }
         }
+    }
+
+    public FireState GetTheFireState()
+    {
+        return currentState;
     }
 }
 
